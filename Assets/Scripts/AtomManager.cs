@@ -18,12 +18,14 @@ public class AtomManager : MonoBehaviour
 
     public AtomData currentAtomData;
     public AtomData upcomingAtomData;
+    public GameObject overlineWarning;
 
     void Start()
     {
         GenerateUpcomingData();
         ProduceAtom();
         ClawManagement(false);
+
     }
 
     void Update()
@@ -134,7 +136,7 @@ public class AtomManager : MonoBehaviour
                     newPos = new Vector3(touch.position.x, Camera.main.WorldToScreenPoint(atomHolder.position).y, z);
                     atomHolder.position = Camera.main.ScreenToWorldPoint(newPos);
                 }
-                else if (touch.phase == TouchPhase.Ended)
+                else if (touch.phase == TouchPhase.Ended && currentAtom != null)
                 {
                     currentAtom.transform.SetParent(contentBox);
 

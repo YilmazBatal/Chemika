@@ -2,6 +2,9 @@ using System;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Merges atoms of the same type upon collision to create a higher-level atom.
+/// </summary>
 public class Atom : MonoBehaviour
 {
     public AtomData atomData;
@@ -13,18 +16,9 @@ public class Atom : MonoBehaviour
     [SerializeField] Transform atomSize;
     [SerializeField] SpriteRenderer atomColor;
 
-    float bottomOfAtom;
-
-    private Transform redLine;
-    private bool isGameOverTriggered = false;
-    private float timeAboveLine = 0f;
-    bool inClaw = true;
-    Rigidbody2D rb;
     void Awake()
     {
-        redLine = GameObject.Find("RedLine").GetComponent<Transform>();
         atomManager = GameObject.Find("AtomManager").GetComponent<AtomManager>();
-        rb = GetComponent<Rigidbody2D>();
     }
     void Start()
     {
@@ -60,45 +54,5 @@ public class Atom : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-    }
-    void Update()
-    {
-        if (rb.bodyType == RigidbodyType2D.Kinematic)
-        {
-            inClaw = true;
-        }
-        else
-        {
-            inClaw = false;
-        }
-        // Check if the atom is above the red line
-
-        bottomOfAtom = transform.position.y - (atomSize.localScale.y / 2); // 0 50 - 0 25
-        if (bottomOfAtom > redLine.position.y)
-        {
-            timeAboveLine += Time.deltaTime;
-
-            // If it stayed above for 5 seconds straight → game over
-            if (!inClaw && !isGameOverTriggered && timeAboveLine >= 5f)
-            {
-                isGameOverTriggered = true;
-                GameOver();
-            }
-        }
-        else
-        {
-            // Reset timer if it goes back below the line
-            timeAboveLine = 0f;
-        }
-    }
-
-    private void GameOver()
-    {
-        Debug.Log("Game Over! Atom stayed above the red line for 5 seconds. ID: " + atomData.id);
-
-        // atomManager.enabled = false;
-        // Time.timeScale = 0f;
-
-        // UIManager.Instance.GameOver(); // uncomment when ready
     }
 }

@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -17,6 +18,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] public AtomData upcomingAtomData => atomManager.upcomingAtomData;
     [SerializeField] public Image upcomingAtomImage;
 
+    [SerializeField] GameObject gameOverPanel;
     void Awake()
     {
         // Singleton pattern
@@ -63,5 +65,17 @@ public class UIManager : MonoBehaviour
     public void UpdateUpcomingAtom()
     {
         upcomingAtomImage.color = upcomingAtomData.atomColor;
+    }
+    public void GameOver()
+    {
+        Debug.Log("Game Over triggered in UIManager.");
+        gameOverPanel.SetActive(true);
+        LeanTween.scale(gameOverPanel, Vector3.one, 0.5f).setEaseOutBack();
+        
+    }
+    public void RestartTheGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Debug.Log("Restarting the game...");
     }
 }
